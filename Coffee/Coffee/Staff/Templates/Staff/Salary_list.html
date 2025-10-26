@@ -1,0 +1,10 @@
+<h2>Danh sách lương nhân viên</h2>
+<a href="{% url 'salary_create' %}">+ Thêm lương</a>
+<ul>
+  {% for s in salaries %}
+    <li>{{ s.user.username }} - {{ s.month }} : {{ s.amount }}
+      <a href="{% url 'salary_update' s.id %}">Sửa</a>
+      <a href="{% url 'salary_delete' s.id %}">Xóa</a>
+    </li>
+  {% endfor %}
+</ul>

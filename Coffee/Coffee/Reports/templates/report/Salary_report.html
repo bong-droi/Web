@@ -1,0 +1,6 @@
+<h2>💰 Báo cáo lương</h2>
+<ul>
+  {% for s in salaries %}
+    <li>{{ s.user.username }} - {{ s.month }} : {{ s.amount }} VNĐ</li>
+  {% endfor %}
+</ul>

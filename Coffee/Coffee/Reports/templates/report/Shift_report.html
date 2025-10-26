@@ -1,0 +1,6 @@
+<h2>🕒 Báo cáo ca làm</h2>
+<ul>
+  {% for r in regs %}
+    <li>{{ r.date }} - {{ r.user.username }} đăng ký {{ r.shift.name }}</li>
+  {% endfor %}
+</ul>

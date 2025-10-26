@@ -1,0 +1,53 @@
+{% load static %}
+{% load dict_extras %}
+<!doctype html><html lang="vi"><head>
+<meta charset="utf-8"><title>Danh sách ca làm</title>
+<link rel="stylesheet" href="{% static 'accounts/css/login.css' %}">
+<style>
+  .table{width:100%;border-collapse:separate;border-spacing:0}
+  th,td{padding:10px 12px;vertical-align:middle;border-bottom:none}
+  thead tr{border-bottom:1px solid #eee}
+  tbody tr{border-bottom:1px solid #eee}
+  th{text-align:left;color:#9c8f87}
+  td:nth-child(4), th:nth-child(4){text-align:left;width:140px}
+  td:nth-child(5), th:nth-child(5){text-align:right;width:120px}
+  td:nth-child(6), th:nth-child(6){text-align:center;width:200px}
+  .actions{display:flex;justify-content:center;gap:8px}
+  .actions a{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;border:1px solid #ddd;border-radius:8px;text-decoration:none;color:#5a3d2b;background:#fff}
+  .actions a:hover{background:#f3f3f3;border-color:#cfcfcf}
+</style>
+</head><body class="page">
+<div class="card" style="width:min(1100px,95vw);">
+  <div class="brand"><svg class="logo" viewBox="0 0 64 64"><path d="M10 22h36v10a14 14 0 0 1-14 14H24A14 14 0 0 1 10 32z" fill="currentColor"/></svg>
+    <div class="brand-text"><h1>🗓️ Danh sách ca làm</h1><p>Quản lý khung giờ làm việc</p></div></div>
+  {% if user.role == "owner" %}
+    <div style="margin:8px 0 14px">
+      <a class="btn" href="{% url 'shift_create' %}">+ Thêm ca</a>
+      <a class="btn" href="{% url 'assign_shift' %}">+ Chỉ định nhân viên</a>
+    </div>
+  {% endif %}
+  <table class="table">
+    <thead><tr><th>Tên</th><th>Bắt đầu</th><th>Kết thúc</th><th>Ngày</th><th>Đã đăng ký</th><th>Thao tác</th></tr></thead>
+    <tbody>
+      {% for shift in shifts %}
+      <tr>
+        <td>{{ shift.name }}</td>
+        <td>{{ shift.start_time }}</td>
+        <td>{{ shift.end_time }}</td>
+        <td>{{ shift.date|date:"d/m/Y"|default:"—" }}</td>
+        <td>{{ reg_counts|dict_key:shift.id }}</td>
+        <td class="actions">
+          {% if user.role == "owner" %}
+            <a href="{% url 'shift_detail' shift.id %}">Chi tiết</a>
+            <a href="{% url 'shift_update' shift.id %}">Sửa</a>
+            <a href="{% url 'shift_delete' shift.id %}">Xóa</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5">Chưa có ca làm.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+</body></html>

@@ -1,0 +1,14 @@
+<h2>📦 Báo cáo vật tư</h2>
+<h3>Danh sách vật tư</h3>
+<ul>
+  {% for s in supplies %}
+    <li>{{ s.name }}: {{ s.quantity }} {{ s.unit }}</li>
+  {% endfor %}
+</ul>
+
+<h3>Lịch sử nhập</h3>
+<ul>
+  {% for p in purchases %}
+    <li>{{ p.date }} - {{ p.supply.name }}: {{ p.quantity }} {{ p.supply.unit }} - {{ p.cost }} VNĐ</li>
+  {% endfor %}
+</ul>

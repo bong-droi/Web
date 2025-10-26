@@ -1,0 +1,125 @@
+{% load static %}
+<!doctype html><html lang="vi"><head>
+<meta charset="utf-8"><title>Quản lý tài khoản</title>
+<link rel="stylesheet" href="{% static 'accounts/css/login.css' %}">
+<style>
+  /* --- Bảng: dùng border cho TR để không bị lệch ở cột cuối --- */
+  .table{
+    width:100%;
+    border-collapse:separate; /* quan trọng: dùng separate để viền theo hàng */
+    border-spacing:0;
+  }
+  th,td{
+    padding:10px 12px;
+    vertical-align:middle;
+    /* bỏ viền dưới ở từng ô để tránh lệch */
+    border-bottom:none;
+  }
+  thead tr{
+    border-bottom:1px solid #eee;    /* viền dưới cho header */
+  }
+  tbody tr{
+    border-bottom:1px solid #eee;    /* một đường thẳng xuyên suốt cả hàng */
+  }
+  th{text-align:left}
+
+  /* Định cỡ cột */
+  td:nth-child(1){width:60px;text-align:right}
+  td:nth-child(2), th:nth-child(2){width:220px}
+  td:nth-child(3), th:nth-child(3){width:260px}
+  td:nth-child(4), th:nth-child(4){width:260px}
+  td:nth-child(5), th:nth-child(5){width:120px}
+  td:nth-child(6), th:nth-child(6){width:120px}
+
+  /* Cột Chi tiết: căn giữa cho cả tiêu đề và dữ liệu */
+  td:nth-child(7), th:nth-child(7){
+    width:100px;
+    text-align:center;
+  }
+
+  /* Bỏ “card” ở Vai trò: hiển thị chữ trơn */
+  .badge{
+    all:unset;              /* bỏ toàn bộ style cũ */
+    font-weight:600;        /* tuỳ chọn: đậm nhẹ cho dễ đọc */
+    color:inherit;          /* theo màu chữ hiện hành */
+  }
+
+  /* Hàng tìm kiếm */
+  .search-row{display:flex;gap:10px;align-items:center}
+  .search-row .input{flex:1}
+  .hint{font-size:12px;color:#888}
+
+  /* Cột Chi tiết dùng flex để nút nằm giữa tuyệt đối */
+  .actions{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+  .actions a{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:6px 12px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    background:#fff;
+    text-decoration:none;
+    color:#5a3d2b;
+    line-height:1;
+    white-space:nowrap;
+    transition:.15s ease;
+  }
+  .actions a:hover{background:#f3f3f3;border-color:#cfcfcf}
+</style>
+
+</head><body class="page">
+<div class="card" style="width:min(1100px,95vw);">
+  <div class="brand"><svg class="logo" viewBox="0 0 64 64"><path d="M10 22h36v10a14 14 0 0 1-14 14H24A14 14 0 0 1 10 32z" fill="currentColor"/></svg>
+    <div class="brand-text"><h1>👥 Quản lý tài khoản</h1><p>Danh sách người dùng</p></div></div>
+
+  <form method="get" class="field">
+    <div class="search-row">
+      <div class="input"><input name="q" value="{{ q }}" placeholder="Tìm theo tên đăng nhập hoặc họ tên (không phân biệt hoa thường)"></div>
+      <button class="btn" style="width:auto">Tìm</button>
+      {% if q %}<a class="btn" style="width:auto" href="?">Xoá lọc</a>{% endif %}
+    </div>
+    <div class="hint">Thứ tự: Chủ quán → Nhân viên → Khách; trong mỗi nhóm sắp xếp theo username A→Z.</div>
+  </form>
+
+  <table class="table">
+    <thead><tr><th>#</th><th>Username</th><th>Họ tên</th><th>Email</th><th>Vai trò</th><th>Trạng thái</th><th>Chi tiết</th></tr></thead>
+    <tbody>
+      {% for u in page.object_list %}
+      <tr>
+        <td>{{ forloop.counter0|add:page.start_index }}</td>
+        <td>{{ u.username }}</td>
+        <td>{{ u.get_full_name|default:"—" }}</td>
+        <td>{{ u.email|default:"—" }}</td>
+        <td><span class="badge">{{ u.role }}</span></td>
+        <td>{{ u.is_active|yesno:"Active,Locked" }}</td>
+        <td class="actions"><a class="link" href="{% url 'user_detail' u.pk %}">Xem</a></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7">Chưa có tài khoản.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <hr style="opacity:.2">
+
+  <h3>Tạo nhanh nhân viên</h3>
+  <form method="post" action="{% url 'user_create' %}">
+    {% csrf_token %}
+    <div class="field"><label>Tên đăng nhập</label><div class="input"><input name="username" required></div></div>
+    <div class="field"><label>Mật khẩu</label><div class="input"><input name="password" type="password" required></div></div>
+    <div class="field"><label>Họ tên & Email (tuỳ chọn)</label>
+      <div style="display:flex;gap:10px">
+        <div class="input" style="flex:1"><input name="first_name" placeholder="Họ"></div>
+        <div class="input" style="flex:1"><input name="last_name" placeholder="Tên"></div>
+        <div class="input" style="flex:1"><input name="email" type="email" placeholder="email@..."></div>
+      </div>
+    </div>
+    <button class="btn">Tạo nhân viên</button>
+  </form>
+</div>
+</body></html>

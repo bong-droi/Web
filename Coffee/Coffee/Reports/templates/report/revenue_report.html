@@ -1,0 +1,6 @@
+<h2>📈 Báo cáo doanh thu</h2>
+<ul>
+  {% for o in orders %}
+    <li>Order #{{ o.id }} - {{ o.created_at }} - Tổng: {{ o.total_price }} VNĐ</li>
+  {% endfor %}
+</ul>

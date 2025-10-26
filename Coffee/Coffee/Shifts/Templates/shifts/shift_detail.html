@@ -1,0 +1,51 @@
+{% load static %}
+<!doctype html><html lang="vi"><head>
+<meta charset="utf-8"><title>Chi tiết ca</title>
+<link rel="stylesheet" href="{% static 'accounts/css/login.css' %}">
+<style>
+  .table{width:100%;border-collapse:separate;border-spacing:0}
+  th,td{padding:10px 12px;vertical-align:middle;border-bottom:none}
+  thead tr{border-bottom:1px solid #eee}
+  tbody tr{border-bottom:1px solid #eee}
+  th{text-align:left;color:#9c8f87}
+  .meta{margin-bottom:12px;color:#9c8f87}
+  .columns{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+</style>
+</head><body class="page">
+<div class="card" style="width:min(1100px,95vw);">
+  <div class="brand"><svg class="logo" viewBox="0 0 64 64"><path d="M10 22h36v10a14 14 0 0 1-14 14H24A14 14 0 0 1 10 32z" fill="currentColor"/></svg>
+    <div class="brand-text"><h1>🗓️ Chi tiết ca</h1><p class="meta">{{ shift.name }} · {{ shift.start_time }} - {{ shift.end_time }} · {{ shift.date|date:"d/m/Y" }}</p></div></div>
+
+  <div class="columns">
+    <div>
+      <h3>Đăng ký tự nguyện</h3>
+      <table class="table">
+        <thead><tr><th>Nhân viên</th><th>Ngày</th></tr></thead>
+        <tbody>
+          {% for r in regs %}
+          <tr><td>{{ r.user.username }}</td><td>{{ r.date }}</td></tr>
+          {% empty %}
+          <tr><td colspan="2">Chưa có.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h3>Được chỉ định</h3>
+      <table class="table">
+        <thead><tr><th>Nhân viên</th><th>Ngày</th></tr></thead>
+        <tbody>
+          {% for a in assigned %}
+          <tr><td>{{ a.user.username }}</td><td>{{ a.date }}</td></tr>
+          {% empty %}
+          <tr><td colspan="2">Chưa có.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p style="margin-top:12px;color:#9c8f87">Tổng: {{ total }}{% if shift.capacity %} / {{ shift.capacity }}{% endif %}</p>
+</div>
+</body></html>
+

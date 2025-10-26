@@ -1,0 +1,57 @@
+{% load static %}
+<!doctype html><html lang="vi"><head>
+<meta charset="utf-8"><title>Ca làm của tôi</title>
+<link rel="stylesheet" href="{% static 'accounts/css/login.css' %}">
+<style>
+  .table{width:100%;border-collapse:separate;border-spacing:0}
+  th,td{padding:10px 12px;vertical-align:middle;border-bottom:none}
+  thead tr{border-bottom:1px solid #eee}
+  tbody tr{border-bottom:1px solid #eee}
+  th{text-align:left;color:#9c8f87}
+  td:nth-child(4), th:nth-child(4){text-align:center;width:160px}
+  .actions{display:flex;justify-content:center;gap:8px}
+  .actions a{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;border:1px solid #ddd;border-radius:8px;text-decoration:none;color:#5a3d2b;background:#fff}
+  .actions a:hover{background:#f3f3f3;border-color:#cfcfcf}
+</style>
+</head><body class="page">
+<div class="card" style="width:min(1100px,95vw);">
+  <div class="brand"><svg class="logo" viewBox="0 0 64 64"><path d="M10 22h36v10a14 14 0 0 1-14 14H24A14 14 0 0 1 10 32z" fill="currentColor"/></svg>
+    <div class="brand-text"><h1>🧑‍🍳 Ca làm của tôi</h1><p>Đổi ca và theo dõi lịch</p></div></div>
+  <div style="margin:8px 0 14px"><a class="btn" href="{% url 'shift_register' %}">+ Đăng ký ca</a></div>
+  <table class="table">
+    <thead><tr><th>Ca</th><th>Bắt đầu</th><th>Kết thúc</th><th>Ngày</th></tr></thead>
+    <tbody>
+      {% for reg in my_shifts %}
+      <tr>
+        <td>{{ reg.shift.name }}</td>
+        <td>{{ reg.shift.start_time }}</td>
+        <td>{{ reg.shift.end_time }}</td>
+        <td>{{ reg.date }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4">Bạn chưa đăng ký ca nào.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if received_swaps %}
+  <h3 style="margin-top:18px">Yêu cầu đổi ca chờ xác nhận</h3>
+  <table class="table">
+    <thead><tr><th>Từ</th><th>Ca</th><th>Ngày</th><th>Hành động</th></tr></thead>
+    <tbody>
+      {% for s in received_swaps %}
+      <tr>
+        <td>{{ s.requester.username }}</td>
+        <td>{{ s.shift.name }}</td>
+        <td>{{ s.date }}</td>
+        <td class="actions">
+          <a href="{% url 'swap_respond' s.id 'approve' %}">Chấp nhận</a>
+          <a href="{% url 'swap_respond' s.id 'reject' %}">Từ chối</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>
+</body></html>

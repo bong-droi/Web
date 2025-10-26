@@ -1,0 +1,9 @@
+<h2>📊 Bảng điều khiển thống kê</h2>
+<p><b>Tổng doanh thu:</b> {{ revenue }} VNĐ</p>
+<p><b>Tổng lương phải trả:</b> {{ total_salary }} VNĐ</p>
+<p><b>Tổng chi phí nhập vật tư:</b> {{ total_purchase }} VNĐ</p>
+
+<a href="{% url 'revenue_report' %}">Xem chi tiết doanh thu</a><br>
+<a href="{% url 'salary_report' %}">Xem lương nhân viên</a><br>
+<a href="{% url 'inventory_report' %}">Xem vật tư & nhập hàng</a><br>
+<a href="{% url 'shift_report' %}">Xem đăng ký ca làm</a><br>
